@@ -28,37 +28,33 @@ sensor.set_temperature_oversample(bme680.OS_8X)
 sensor.set_filter(bme680.FILTER_SIZE_3)
 
 print('Polling:')
-try:
-    while True:
-        if sensor.get_sensor_data():
-            temp = sensor.data.temperature
-            pres = sensor.data.pressure
-            humi = sensor.data.humidity
-            currentDT = datetime.datetime.now().strftime("%d-%m-%Y %H:%M:%S")
 
-            oFile = open("/var/www/html/index.html","w")
+if sensor.get_sensor_data():
+    temp = sensor.data.temperature
+    pres = sensor.data.pressure
+    humi = sensor.data.humidity
+    currentDT = datetime.datetime.now().strftime("%d-%m-%Y %H:%M:%S")
 
-            message = """<html>
-            <head>
-            <meta http-equiv="refresh" content="15">
-            </head>
-            <body>
-            <p>Temperature = {0:.2f} degC<p>
-            <p>Pressure = {1:.1f} mBar<p>
-            <p>Humidity = {2:.2f} %RH<p>
-            <p> <p>
-            <p>Last Reading: {3}<p>
-            </body>
-            </html>""".format(temp, pres, humi, currentDT)
+    oFile = open("/var/www/html/index.html","w")
 
-            oFile.write(message)
-            oFile.close
+    message = """<html>
+    <head>
+    <meta http-equiv="refresh" content="15">
+    </head>
+    <body>
+    <p>Temperature = {0:.2f} degC<p>
+    <p>Pressure = {1:.1f} mBar<p>
+    <p>Humidity = {2:.2f} %RH<p>
+    <p> <p>
+    <p>Last Reading: {3}<p>
+    </body>
+    </html>""".format(temp, pres, humi, currentDT)
 
-            output = '{0:.2f} C,{1:.2f} hPa,{2:.3f} %RH'.format(
-                temp,
-                pres,
-                humi)
-            print(output)
-            time.sleep(15)
-except KeyboardInterrupt:
-    pass
+    oFile.write(message)
+    oFile.close
+
+    output = '{0:.2f} C,{1:.2f} hPa,{2:.3f} %RH'.format(
+        temp,
+        pres,
+        humi)
+    print(output)
